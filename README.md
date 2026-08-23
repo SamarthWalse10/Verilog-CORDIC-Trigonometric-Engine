@@ -10,12 +10,18 @@ This repository contains a Register Transfer Level (RTL) implementation of the C
 * **Continuous 360° Waveform Synthesis:** Features a robust testbench (`cordic_tb.v`) that dynamically maps input phase angles outside the principal domain, allowing for the continuous simulation of full 360-degree analog waveforms<!--[cite: 7] -->.
 
 ## Mathematical Foundation
-The CORDIC algorithm operates in rotation mode, calculating the sine and cosine of an input angle $z_0$ by iteratively rotating a vector. To avoid hardware multipliers, the rotation angles are restricted such that $\tan(\theta_i) = 2^{-i}$. 
+
+The CORDIC algorithm operates in rotation mode, calculating the sine and cosine of an input angle $z_0$ by iteratively rotating a vector. To avoid hardware multipliers, the rotation angles are restricted such that $\tan(\theta_i) = 2^{-i}$.
 
 The iterative hardware equations implemented in this design are:
-$$x_{i+1} = x_i \mp (y_i \cdot 2^{-i})$$
-$$y_{i+1} = y_i \pm (x_i \cdot 2^{-i})$$
-$$z_{i+1} = z_i \mp \tan^{-1}(2^{-i})$$
+
+```math
+\begin{aligned}
+x_{i+1} &= x_i \mp \left(y_i \cdot 2^{-i}\right) \\
+y_{i+1} &= y_i \pm \left(x_i \cdot 2^{-i}\right) \\
+z_{i+1} &= z_i \mp \tan^{-1}\left(2^{-i}\right)
+\end{aligned}
+```
 
 To account for the processing gain of the CORDIC algorithm, the initial $x$ value is pre-scaled by the constant $K \approx 0.60725$, which is represented in the design as the Q2.14 hex value `16'h26DF`<!--[cite: 6] -->.
 
